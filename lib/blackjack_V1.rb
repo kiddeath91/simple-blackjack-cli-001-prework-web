@@ -3,11 +3,12 @@ def welcome
 end
 
 def deal_card  #generates one card value
-   rand(1..11)
+  rand(1..11)
 end
 
 def display_card_total(card_total) #counts total of card values
   puts "Your cards add up to #{card_total}"
+  return card_total # REQUIRED !!!!
 end
 
 def prompt_user
@@ -25,23 +26,24 @@ end
 def initial_round #inital two card deal
   card_total = deal_card + deal_card
   display_card_total(card_total)
-  return card_total # REQUIRED !!!!
 end
 
 def hit?(card_total)
+  card_total = card_total
   prompt_user
   hit_or_stay = get_user_input
   case hit_or_stay
     when "h"
-      card_total += deal_card
-      display_card_total(card_total)
-    return card_total
+      deal_card
+      new_card_total = card_total + deal_card
+      card_total = new_card_total
     when "s"
       card_total = card_total
     else
       invalid_command
-  end
-
+    end
+  card_total = display_card_total(card_total)
+  #return card_total BREAKS SHIT DO NOT USE !!!!!!
   end
 
 def invalid_command
@@ -52,9 +54,10 @@ end
 
 def runner
   welcome
-    hand = initial_round
-    until hand > 21 do
-        hand = hit?(hand)
-    end
-   end_game(hand)
+  # card_total = initial_round
+  hit?(card_total)
+  until hit?(card_total) > 21 do
+    hit?(card_total)
+  end
+   end_game(card_total)
 end
